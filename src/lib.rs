@@ -2,11 +2,9 @@
 extern crate lazy_static;
 
 pub fn lipmaa(n: u32) -> u32 {
-    if n < 1 {
-        panic!("n must be larger than 0")
-    }
-
-    if n == 1 {
+    //This is from the bamboo spec, where 0 is not a valid value for a sequence number. 1 is the
+    //first in the sequence.
+    if n == 0 || n == 1 {
         return 1;
     }
 
@@ -142,14 +140,5 @@ mod tests {
         assert_eq!(find_k(193710244), 18);
         assert_eq!(find_k(581130733), 19);
         assert_eq!(find_k(core::u32::MAX), 20);
-    }
-
-    #[test]
-    fn lipmaa_spines() {
-        let actual_expecteds = [(4, 1), (13, 4), (40, 13)];
-
-        actual_expecteds
-            .iter()
-            .for_each(|(n, expected)| assert_eq!(lipmaa(*n), *expected))
     }
 }
