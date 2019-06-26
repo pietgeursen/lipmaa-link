@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate lazy_static;
+
 pub fn lipmaa(n: u32) -> u32 {
     if n < 1 {
         panic!("n must be larger than 0")
@@ -26,8 +29,22 @@ fn g(n: u32) -> u32 {
     }
 }
 
+lazy_static! {
+    static ref KS: Vec<u32> = {
+        (0..21)
+            .into_iter()
+            .map(|x: u32| (3u64.pow(x) / 2) as u32)
+            .collect()
+    };
+}
+
 fn find_k(n: u32) -> u32 {
-    f64::log((n as f64) * 2.0 + 1.0, 3.0) as u32
+    KS.iter()
+        .enumerate()
+        .take_while(|(_, k)| n >= **k)
+        .last()
+        .unwrap()
+        .0 as u32
 }
 
 fn find_new_k(n: u32) -> u32 {
@@ -87,6 +104,7 @@ mod tests {
             (38, 34),
             (39, 26),
             (40, 13),
+            (121, 40),
         ];
 
         actual_expecteds
@@ -108,6 +126,21 @@ mod tests {
         assert_eq!(find_k(12), 2);
         assert_eq!(find_k(13), 3);
         assert_eq!(find_k(40), 4);
+        assert_eq!(find_k(121), 5);
+        assert_eq!(find_k(364), 6);
+        assert_eq!(find_k(1093), 7);
+        assert_eq!(find_k(3281), 8);
+        assert_eq!(find_k(9841), 9);
+        assert_eq!(find_k(29524), 10);
+        assert_eq!(find_k(88573), 11);
+        assert_eq!(find_k(265720), 12);
+        assert_eq!(find_k(797161), 13);
+        assert_eq!(find_k(2391484), 14);
+        assert_eq!(find_k(7174453), 15);
+        assert_eq!(find_k(21523360), 16);
+        assert_eq!(find_k(64570081), 17);
+        assert_eq!(find_k(193710244), 18);
+        assert_eq!(find_k(581130733), 19);
         assert_eq!(find_k(core::u32::MAX), 20);
     }
 
