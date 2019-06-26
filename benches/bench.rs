@@ -1,11 +1,11 @@
 #[macro_use]
 extern crate criterion;
-extern crate lipmaa;
+extern crate lipmaa_link;
 extern crate rand;
 
 use criterion::black_box;
 use criterion::Criterion;
-use lipmaa::lipmaa;
+use lipmaa_link::lipmaa;
 use rand::random;
 
 fn recurse(n: u32) -> u32 {

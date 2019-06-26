@@ -1,69 +1,40 @@
-#[macro_use]
-extern crate lazy_static;
-
 #[no_mangle]
 pub extern "C" fn lipmaa(n: u32) -> u32 {
-    //This is from the bamboo spec, where 0 is not a valid value for a sequence number. 1 is the
-    //first in the sequence.
-    if n == 0 || n == 1 {
-        return 1;
+    let mut m: u64 = 1;
+    let mut po3: u64 = 3;
+    let mut u: u64 = n as u64;
+
+    // find k such that (3^k - 1)/2 >= n
+    while m < n as u64 {
+        po3 *= 3;
+        m = (po3 - 1) / 2;
     }
 
-    let k = find_k(n);
+    // find longest possible backjump
+    po3 /= 3;
+    if m != n as u64 {
+        while u != 0 {
+            m = (po3 - 1) / 2;
+            po3 /= 3;
+            u %= m;
+        }
 
-    if n == (((3u64.pow(k)) - 1) / 2) as u32 {
-        n - (3u32.pow(k - 1))
-    } else {
-        n - (((3u64.pow(g(n))) - 1) / 2) as u32
+        if m != po3 {
+            po3 = m;
+        }
     }
-}
 
-fn g(n: u32) -> u32 {
-    let k = find_k(n);
-    if n == (((3u64.pow(k)) - 1) / 2) as u32 {
-        k
-    } else {
-        let k = find_new_k(n);
-        g(n - (((3u64.pow(k - 1)) - 1) / 2) as u32)
-    }
+    return n - po3 as u32;
 }
-
-lazy_static! {
-    static ref KS: Vec<u32> = {
-        (0..21)
-            .into_iter()
-            .map(|x: u32| (3u64.pow(x) / 2) as u32)
-            .collect()
-    };
-}
-
-fn find_k(n: u32) -> u32 {
-    KS.iter()
-        .enumerate()
-        .take_while(|(_, k)| n >= **k)
-        .last()
-        .unwrap()
-        .0 as u32
-}
-
-fn find_new_k(n: u32) -> u32 {
-    let k = find_k(n) + 1;
-    if n < ((3u64.pow(k) - 1) / 2) as u32 {
-        k
-    } else {
-        k + 1
-    }
-}
-
 #[cfg(test)]
 mod tests {
 
-    use crate::{find_k, lipmaa};
+    use crate::lipmaa;
 
     #[test]
     fn lipmaa_is_ok() {
         let actual_expecteds = [
-            (1, 1),
+            (1, 0),
             (2, 1),
             (3, 2),
             (4, 1),
@@ -114,32 +85,5 @@ mod tests {
     #[test]
     fn largest_n() {
         assert_eq!(lipmaa(core::u32::MAX), 4294967294);
-    }
-
-    #[test]
-    fn find_k_is_ok() {
-        assert_eq!(find_k(1), 1);
-        assert_eq!(find_k(3), 1);
-        assert_eq!(find_k(4), 2);
-        assert_eq!(find_k(5), 2);
-        assert_eq!(find_k(12), 2);
-        assert_eq!(find_k(13), 3);
-        assert_eq!(find_k(40), 4);
-        assert_eq!(find_k(121), 5);
-        assert_eq!(find_k(364), 6);
-        assert_eq!(find_k(1093), 7);
-        assert_eq!(find_k(3281), 8);
-        assert_eq!(find_k(9841), 9);
-        assert_eq!(find_k(29524), 10);
-        assert_eq!(find_k(88573), 11);
-        assert_eq!(find_k(265720), 12);
-        assert_eq!(find_k(797161), 13);
-        assert_eq!(find_k(2391484), 14);
-        assert_eq!(find_k(7174453), 15);
-        assert_eq!(find_k(21523360), 16);
-        assert_eq!(find_k(64570081), 17);
-        assert_eq!(find_k(193710244), 18);
-        assert_eq!(find_k(581130733), 19);
-        assert_eq!(find_k(core::u32::MAX), 20);
     }
 }
