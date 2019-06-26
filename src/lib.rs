@@ -1,7 +1,8 @@
 #[macro_use]
 extern crate lazy_static;
 
-pub fn lipmaa(n: u32) -> u32 {
+#[no_mangle]
+pub extern "C" fn lipmaa(n: u32) -> u32 {
     //This is from the bamboo spec, where 0 is not a valid value for a sequence number. 1 is the
     //first in the sequence.
     if n == 0 || n == 1 {
