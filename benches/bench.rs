@@ -8,7 +8,7 @@ use criterion::Criterion;
 use lipmaa_link::lipmaa;
 use rand::random;
 
-fn recurse(n: u32) -> u32 {
+fn recurse(n: u64) -> u64 {
     match n {
         0 => 1,
         1 => 1,
@@ -18,7 +18,7 @@ fn recurse(n: u32) -> u32 {
 
 fn criterion_benchmark(c: &mut Criterion) {
     c.bench_function("walk_from_max_to_min", |b| {
-        b.iter(|| recurse(black_box(core::u32::MAX)))
+        b.iter(|| recurse(black_box(core::u64::MAX)))
     });
     c.bench_function("walk_from_rand_to_min", |b| {
         b.iter(|| recurse(black_box(random())))

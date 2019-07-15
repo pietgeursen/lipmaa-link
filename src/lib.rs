@@ -1,18 +1,18 @@
 #[no_mangle]
-pub extern "C" fn lipmaa(n: u32) -> u32 {
-    let mut m: u64 = 1;
-    let mut po3: u64 = 3;
-    let mut u: u64 = n as u64;
+pub extern "C" fn lipmaa(n: u64) -> u64 {
+    let mut m: u128 = 1;
+    let mut po3: u128 = 3;
+    let mut u: u128 = n as u128;
 
     // find k such that (3^k - 1)/2 >= n
-    while m < n as u64 {
+    while m < n as u128 {
         po3 *= 3;
         m = (po3 - 1) / 2;
     }
 
     // find longest possible backjump
     po3 /= 3;
-    if m != n as u64 {
+    if m != n as u128 {
         while u != 0 {
             m = (po3 - 1) / 2;
             po3 /= 3;
@@ -24,7 +24,7 @@ pub extern "C" fn lipmaa(n: u32) -> u32 {
         }
     }
 
-    return n - po3 as u32;
+    return n - po3 as u64;
 }
 #[cfg(test)]
 mod tests {
@@ -83,7 +83,11 @@ mod tests {
     }
 
     #[test]
-    fn largest_n() {
-        assert_eq!(lipmaa(core::u32::MAX), 4294967294);
+    fn largest_n_u32() {
+        assert_eq!(lipmaa(core::u32::MAX as u64), 4294967294);
+    }
+    #[test]
+    fn largest_n_u64_no_explode() {
+        lipmaa(core::u64::MAX);
     }
 }
