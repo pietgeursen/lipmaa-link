@@ -1,3 +1,16 @@
+//! A function to calculate [lipmaa](https://github.com/AljoschaMeyer/bamboo/blob/master/README.md#links-and-entry-verification) sequence numbers.
+//!
+//! From the bamboo spec: "The lipmaalinks are chosen such that for any pair of entries there is a path from the newer to the older one of a length logarithmic in their distance."
+//!
+//! ```
+//! use lipmaa_link::lipmaa;
+//!
+//! let result = lipmaa(13);
+//! assert_eq!(result, 4);
+//! ```
+//!
+
+/// Calculates the lipmaa link number given the current sequence number.
 #[no_mangle]
 pub extern "C" fn lipmaa(n: u64) -> u64 {
     let mut m: u128 = 1;
