@@ -5,6 +5,6 @@
 
 extern "C" {
 
-uint32_t lipmaa(uint32_t n);
+uint64_t lipmaa(uint64_t n);
 
 } // extern "C"
