@@ -5,7 +5,7 @@ authors = ["Piet Geursen <pietgeursen@gmail.com>"]
 edition = "2018"
 description = "A function to calculate [lipmaa](https://github.com/AljoschaMeyer/bamboo/blob/master/README.md#links-and-entry-verification) sequence numbers."
 repository = "https://github.com/pietgeursen/lipmaa-link"
-licence = "AGPL-3.0"
+license = "AGPL-3.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
