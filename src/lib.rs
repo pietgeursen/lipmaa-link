@@ -1,3 +1,4 @@
+#![no_std]
 #[no_mangle]
 pub extern "C" fn lipmaa(n: u32) -> u32 {
     let mut m: u64 = 1;
