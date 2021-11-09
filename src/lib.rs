@@ -12,8 +12,7 @@
 //!
 
 /// Calculates the lipmaa link number given the current sequence number.
-#[no_mangle]
-pub extern "C" fn lipmaa(n: u64) -> u64 {
+pub const fn lipmaa(n: u64) -> u64 {
     let mut m: u128 = 1;
     let mut po3: u128 = 3;
     let mut u: u128 = n as u128;
@@ -40,10 +39,29 @@ pub extern "C" fn lipmaa(n: u64) -> u64 {
 
     return n - po3 as u64;
 }
+const fn get_path_length(mut n: u64) -> u64 {
+    let mut len = 0;
+
+    while n > 0 {
+        n = lipmaa(n);
+        len += 1;
+    }
+
+    len
+}
+
+/// The number of lipmaa links needed to traverse from u64::MAX back to 0;
+pub const MAX_NUM_LIPMAA_LINKS_FOR_U64: u64 = get_path_length(u64::MAX);
+
+/// Will `n` create a "skip" link rather than just `n - 1`
+pub fn is_skip_link(sequence_num: u64) -> bool {
+    lipmaa(sequence_num) != sequence_num - 1
+}
+
 #[cfg(test)]
 mod tests {
 
-    use crate::lipmaa;
+    use crate::{get_path_length, lipmaa};
 
     #[test]
     fn lipmaa_is_ok() {
@@ -94,6 +112,15 @@ mod tests {
         actual_expecteds
             .iter()
             .for_each(|(n, expected)| assert_eq!(lipmaa(*n), *expected))
+    }
+
+    #[test]
+    fn get_path_length_works() {
+        let actual_expecteds = [(1, 1), (2, 2), (3, 3), (4, 2)];
+
+        actual_expecteds
+            .iter()
+            .for_each(|(n, expected)| assert_eq!(get_path_length(*n), *expected));
     }
 
     #[test]

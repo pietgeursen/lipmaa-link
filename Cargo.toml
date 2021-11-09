@@ -1,9 +1,9 @@
 [package]
 name = "lipmaa-link"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Piet Geursen <pietgeursen@gmail.com>"]
 edition = "2018"
-description = "A function to calculate [lipmaa](https://github.com/AljoschaMeyer/bamboo/blob/master/README.md#links-and-entry-verification) sequence numbers."
+description = "A function to calculate lipmaa sequence numbers."
 repository = "https://github.com/pietgeursen/lipmaa-link"
 license = "AGPL-3.0"
 
