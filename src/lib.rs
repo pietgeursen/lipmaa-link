@@ -1,4 +1,4 @@
-#![no_std]
+#![cfg_attr(not(feature = "std"), no_std)]
 //! A function to calculate [lipmaa](https://github.com/AljoschaMeyer/bamboo/blob/master/README.md#links-and-entry-verification) sequence numbers.
 //!
 //! From the bamboo spec: "The lipmaalinks are chosen such that for any pair of entries there is a path from the newer to the older one of a length logarithmic in their distance."
@@ -39,6 +39,31 @@ pub const fn lipmaa(n: u64) -> u64 {
 
     return n - po3 as u64;
 }
+
+/// Get all the lipmaa link numbers between `n` and 0
+///
+/// ```
+/// use lipmaa_link::get_lipmaa_links_back_to_root;
+///
+/// let n = 7;
+///
+/// let links = get_lipmaa_links_back_to_root(7);
+///
+/// assert_eq!(links, vec![6, 5, 4, 1, 0]);
+///
+/// ```
+#[cfg(feature = "std")]
+pub fn get_lipmaa_links_back_to_root(mut n: u64) -> Vec<u64> {
+    let mut path = Vec::new();
+
+    while n > 0 {
+        n = lipmaa(n);
+        path.push(n);
+    }
+
+    path
+}
+
 const fn get_path_length(mut n: u64) -> u64 {
     let mut len = 0;
 
