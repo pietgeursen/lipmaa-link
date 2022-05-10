@@ -53,10 +53,34 @@ pub const fn lipmaa(n: u64) -> u64 {
 ///
 /// ```
 #[cfg(feature = "std")]
-pub fn get_lipmaa_links_back_to_root(mut n: u64) -> Vec<u64> {
+pub fn get_lipmaa_links_back_to_root(n: u64) -> Vec<u64> {
+    get_lipmaa_links_back_to(n, 0)
+}
+
+/// Get all the lipmaa link numbers back to some other lipmaa_link in descending order
+///
+/// ```
+/// use lipmaa_link::get_lipmaa_links_back_to;
+///
+/// let links = get_lipmaa_links_back_to(7, 1);
+///
+/// assert_eq!(links, vec![6, 5, 4, 1]);
+///
+/// let links = get_lipmaa_links_back_to(7, 2);
+///
+/// assert_eq!(links, vec![6, 5, 4, 1]);
+///
+/// let links = get_lipmaa_links_back_to(7, 4);
+///
+/// assert_eq!(links, vec![6, 5, 4]);
+///
+/// ```
+#[cfg(feature = "std")]
+pub fn get_lipmaa_links_back_to(upper: u64, lower: u64) -> Vec<u64> {
     let mut path = Vec::new();
 
-    while n > 0 {
+    let mut n = upper;
+    while n > lower {
         n = lipmaa(n);
         path.push(n);
     }
